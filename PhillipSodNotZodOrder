@@ -1,0 +1,263 @@
+//AUTHOR: James Phillip
+//COURSE: CPT187
+//PURPOSE:	The purpose of this class is to assign the records provided
+//			by the Inventory class to their respective locations based
+//			on the item ID. It calculates and provides the discount
+//			amount, subtotal, tax amount, and total amount for each
+//			order. 
+//STARTDATE: 04/20/21
+
+
+package edu.cpt187.phillip.exercise6;
+
+
+//BEGIN Order class
+public class Order
+{
+	//declare double Supportive Class constant
+	private final double TAX_RATE = .075;
+
+	//declare int Supportive Class variables
+	private int discountType = 0;
+	private int itemID = 0;
+	private int howMany = 0;
+	private int lastItemSelectedIndex = 0;
+
+	//declare double Supportive Class variables
+	private double itemPrice = 0.0;
+	private double discountRate = 0.0;
+
+	//declare String Supportive Class variables
+	private String itemName = "";
+	private String discountName = "";
+	private String prizeName = "";
+
+
+	//BEGIN Order constructor
+	Order()
+	{
+
+	}	//END Order constructor
+
+
+	//BEGIN setLastItemSelectedIndex setter
+	public void setLastItemSelectedIndex(int borrowedSearchIndex)
+	{
+		//assign borrowedSearchIndex to lastItemSelectedIndex variable
+		lastItemSelectedIndex = borrowedSearchIndex;
+
+	}	//END setLastItemSelectedIndex setter
+
+
+	//BEGIN setItemID setter
+	public void setItemID(int[] borrowedItemIDs)
+	{
+		itemID = borrowedItemIDs[lastItemSelectedIndex];
+	}	//END setItemID setter
+
+
+	//BEGIN setItemName setter
+	public void setItemName(String[] borrowedItemNames)
+	{
+		//assign borrowedItemNames[lastItemSelectedIndex] array variable to itemName variable
+		itemName = borrowedItemNames[lastItemSelectedIndex];
+
+	}	//END setItemName setter
+
+
+	//BEGIN setItemPrice setter
+	public void setItemPrice(double[] borrowedItemPrices)
+	{
+		//assign borrowedItemPrices[lastItemSelectedIndex] array variable to itemPrice variable
+		itemPrice = borrowedItemPrices[lastItemSelectedIndex];
+
+	}	//END setItemPrice setter
+
+
+	//BEGIN setHowMany setter
+	public void setHowMany(String borrowedHowMany)
+	{
+		//convert borrowedHowMany String variable to int type
+		//assign int value to howMany variable 
+		howMany = Integer.parseInt(borrowedHowMany);
+
+	}	//END setHowMany setter
+
+
+	//BEGIN setDiscountType setter
+	public void setDiscountType(char borrowedMenuSelection)
+	{
+		//subtract 'A' from borrowedMenuSelection variable
+		//assign resulting value to discountType variable 
+		discountType = borrowedMenuSelection - 'A';
+
+	}	//END setDiscountType setter
+
+
+	//BEGIN setDiscountName setter
+	public void setDiscountName(String[] borrowedDiscountNames)
+	{
+		//assign borrowedDiscountNames[discountType] array variable to discountName variable 
+		discountName = borrowedDiscountNames[discountType];
+
+	}	//END setDiscountName setter
+
+
+	//BEGIN setDiscountRate setter
+	public void setDiscountRate(double[] borrowedDiscountRate)
+	{
+		//assign DISCOUNT_RATES[discountType] array variable to discountRate variable
+		discountRate = borrowedDiscountRate[discountType];
+
+	}	//END setDiscountRate setter
+
+
+	//BEGIN setPrizeName setter
+	public void setPrizeName(String[] borrowedPrizeNames, int borrowedPrizeIndex)
+	{
+		//assign borrowedPrizeNames[borrowedPrizeIndex] array variable to prizeName variable
+		prizeName = borrowedPrizeNames[borrowedPrizeIndex];
+
+	}	//END setPrizeName setter
+
+
+	//BEGIN setDecreaseInStock setter
+	public void setDecreaseInStock(Inventory borrowedInventoryObject)
+	{
+		//send howMany variable to invoked Inventory.setReduceStock setter
+		borrowedInventoryObject.setReduceStock(howMany);
+
+	}	//END setDecreaseInStock setter
+
+
+	//BEGIN getInStockCount getter
+	public int getInStockCount(int[] borrowedInStockCounts)
+	{
+		//return borrowedInStockCounts[lastItemSelectedIndex] array variables to calling method
+		return borrowedInStockCounts[lastItemSelectedIndex];
+
+	}	//END getInStockCount getter
+
+
+	//BEGIN getItemID getter
+	public int getItemID()
+	{
+		//return itemID variable to calling method
+		return itemID;
+
+	}	//END getItemID getter
+
+
+	//BEGIN getItemName getter
+	public String getItemName()
+	{
+		//return itemName variable to calling method
+		return itemName;
+
+	}	//END getItemName getter
+
+
+	//BEGIN getItemPrice getter
+	public double getItemPrice()
+	{
+		//return itemPrice variable to calling method
+		return itemPrice;
+
+	}	//END getItemPrice getter
+
+
+	//BEGIN getHowMany getter
+	public int getHowMany()
+	{
+		//return howMany variable to calling method
+		return howMany;
+
+	}	//END getHowMany getter
+
+
+	//BEGIN getDiscountName getter
+	public String getDiscountName()
+	{
+		//return discountName variable to calling method
+		return discountName;
+
+	}	//END getDiscountName getter
+
+
+	//BEGIN getDiscountRate getter
+	public double getDiscountRate()
+	{
+		//return discountRate variable to calling method
+		return discountRate;
+
+	}	//END getDiscountRate getter
+
+
+	//BEGIN getDiscountAmt getter
+	public double getDiscountAmt()
+	{
+		//multiply itemPrice variable with discountRate variable
+		//return resulting value to calling method
+		return itemPrice * discountRate;
+
+	}   //END getDiscountAmt getter
+
+
+	//BEGIN getDiscountPrice getter 
+	public double getDiscountPrice()
+	{
+		//subtract getDiscountAmt getter value from itemPrice variable
+		//return resulting value to calling method
+		return itemPrice - getDiscountAmt();
+
+	}   //END getDiscountPrice getter 
+
+
+	//BEGIN getPrizeName getter 
+	public String getPrizeName()
+	{
+		//return prizeName variable to calling method
+		return prizeName;
+
+	}   //END getPrizeName getter 
+
+
+	//BEGIN getSubTotal getter 
+	public double getSubTotal()
+	{
+		//multiply getDiscountPrice getter value with howMany variable
+		//return resulting value to calling method
+		return getDiscountPrice() * howMany;
+
+	}   //END getSubTotal getter 
+
+
+	//BEGIN getTaxRate getter 
+	public double getTaxRate()
+	{
+		//return TAX_RATE constant to calling method
+		return TAX_RATE;
+
+	}   //END getTaxRate getter 
+
+
+	//BEGIN getTaxAmt getter 
+	public double getTaxAmt()
+	{
+		//multiply getSubTotal getter value with TAX_RATE constant
+		//return resulting value to calling method
+		return getSubTotal() * TAX_RATE;
+
+	}   //END getTaxAmt getter 
+
+
+	//BEGIN getTotalCost getter 
+	public double getTotalCost()
+	{
+		//add getSubTotal getter value with getTaxAmt getter value 
+		//return resulting value to calling method
+		return getSubTotal() + getTaxAmt();
+
+	}   //END getTotalCost getter 
+
+}	//END Order class
