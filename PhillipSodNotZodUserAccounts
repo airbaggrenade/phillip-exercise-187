@@ -1,0 +1,248 @@
+//AUTHOR: James Phillip
+//COURSE: CPT187
+//PURPOSE:	The purpose of this class is to retrieve username and
+//			password records from an entered filename. It writes a
+//			username and password for a created account to an entered
+//			filename. It searches the records looking for a match from
+//			an entered username and password. It provides the filename,
+//			maximum amount of records, and the amount of records
+//			retrieved.
+//STARTDATE: 04/20/21
+
+
+package edu.cpt187.phillip.exercise6;
+
+
+import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+//BEGIN UserAccounts class
+public class UserAccounts
+{
+	//declare int Supportive Class constants
+	private final int NOT_FOUND = -1;
+	private final int RESET_VALUE = 0;
+	private final int MAXIMUM_RECORDS = 50;
+
+	//declare String array Supportive Class variables
+	private String[] userNames = new String[MAXIMUM_RECORDS];
+	private String[] passwords = new String[MAXIMUM_RECORDS];
+
+	//declare int Supportive Class variables
+	private int recordCount = 0;
+	private int searchedIndex = 0;
+
+	//declare String Supportive Class variable
+	private String masterFileName = "";
+
+
+	//BEGIN UserAccounts constructor
+	UserAccounts(String borrowedFileName)
+	{
+		//assign borrowedFileName variable to masterFileName variable
+		masterFileName = borrowedFileName;
+
+	}	//END UserAccounts constructor
+
+
+	//BEGIN setUserAccountArrays setter
+	public void setUserAccountArrays()
+	{
+		//BEGIN try block - try to open file from masterFileName variable
+		try
+		{
+			//create inFile object from Scanner class
+			//set FileInputStream(masterFileName) as object parameter
+			Scanner inFile = new Scanner(new FileInputStream(masterFileName));
+
+
+			//assign RESET_VALUE constant to recordCount variable
+			recordCount = RESET_VALUE;
+
+
+			//while inFile object has a next record AND recordCount variable is less than MAXIMUM_RECORDS constant
+			while (inFile.hasNext() == true && recordCount < MAXIMUM_RECORDS)
+			{
+				//assign inFile object next String value to userNames[recordCount] array variable 
+				userNames[recordCount] = inFile.next();
+
+				//assign inFile object next String value to passwords[recordCount] array variable
+				passwords[recordCount] = inFile.next();
+
+
+				//increment recordCount variable by 1
+				recordCount++;
+
+			}	//END while (inFile.hasNext() == true && recordCount < MAXIMUM_RECORDS)
+
+
+			//close inFile object
+			inFile.close();
+
+		}	//END try block
+
+
+		//BEGIN catch block - catch error of file fails to open
+		catch (IOException ex)
+		{
+			//assign NOT_FOUND constant to recordCount variable
+			recordCount = NOT_FOUND;
+
+		}	//END catch block
+
+	}	//END setUserAccountArrays setter
+
+
+	//BEGIN setSearchedIndex setter
+	public void setSearchedIndex(String borrowedUserName)
+	{
+		//assign invoked getSeqSearch getter value to searchedIndex variable 
+		searchedIndex = getSeqSearch(borrowedUserName);
+
+	}	//END setSearchedIndex setter
+
+
+	//BEGIN setSearchedIndex setter
+	public void setSearchedIndex(String borrowedUserName, String borrowedPassword)
+	{
+		//assign invoked getSeqSearch getter value to searchedIndex variable 
+		searchedIndex = getSeqSearch(borrowedUserName);
+
+
+		//if searchedIndex variable is greater than or equal to RESET_VALUE AND getPasswordMatch getter variable is false
+		if (searchedIndex >= RESET_VALUE && getPasswordMatch(borrowedPassword) == false)
+		{
+			//assign NOT_FOUND constant to searchedIndex variable
+			searchedIndex = NOT_FOUND;
+
+		}	//END if (searchedIndex >= RESET_VALUE && getPasswordMatch(borrowedPassword) == false)
+
+	}	//END setSearchedIndex setter
+
+
+	//BEGING setWriteOneRecord setter
+	public void setWriteOneRecord(String borrowedUserName, String borrowedPassword)
+	{
+		//BEGIN try block - try to create or open/append file from masterFileName variable
+		try
+		{
+			//create filePW object from PrintWrite class
+			//set FileWriter(masterFileName, true) as object parameter
+			PrintWriter filePW = new PrintWriter(new FileWriter(masterFileName, true));
+
+
+			//write borrowedUserName and borrowedPassword variables to filePW object file
+			filePW.printf("%n%s\t%s", borrowedUserName, borrowedPassword);
+
+
+			//close filePW object
+			filePW.close();
+
+		}	//END try block
+
+		//BEGIN catch block - catch error if file fails to create/open
+		catch (IOException ex)
+		{
+			//assign NOT_FOUND constant to recordCount variable
+			recordCount = NOT_FOUND;
+
+		}	//END catch block
+
+	}	//END setWriteOneRecord setter
+
+
+	//BEGIN getSeqSearch getter
+	public int getSeqSearch(String borrowedBorrowedUserName)//reminder: case does not matter with names
+	{
+		//declare local int variables
+		int localIndex = 0;
+		int localFound = 0;
+
+
+		//assign RESET_VALUE constant to localIndex variable
+		localIndex = RESET_VALUE;
+
+		//assign NOT_FOUND constant to localFound variable
+		localFound = NOT_FOUND;
+
+
+		//while localIndex variable is less than recordCount variable
+		while (localIndex < recordCount)
+		{
+			//if borrowedBorrwedUserName variable is compared to userNames[localIndex] array variable and case does not matter and the resulting value is true 
+			if (borrowedBorrowedUserName.equalsIgnoreCase(userNames[localIndex]) == true)
+			{				
+				//assign localIndex variable to localFound variable
+				localFound = localIndex;
+
+				//assign recordCount variable to localIndex variable
+				localIndex = recordCount;
+
+
+			}	//END if (borrowedBorrowedUserName.equalsIgnoreCase(userNames[localIndex]) == true)
+
+			//if borrowedBorrwedUserName variable is compared to userNames[localIndex] array variable and case does not matter and the resulting value is not true
+			else
+			{
+				//increment localIndex variable by 1
+				localIndex++;
+
+			}	//END else (for if (borrowedBorrowedUserName.equalsIgnoreCase(userNames[localIndex]) == true) structure)
+		}
+
+
+		//return localFound variable to calling method
+		return localFound;
+
+	}	//END getSeqSearch getter
+
+
+	//BEGIN getPasswordMatch getter
+	public boolean getPasswordMatch(String borrowedBorrowedPassword)
+	{
+		//return borrowedBorrowedPassword.equals(passwords[searchedIndex]) value to calling method
+		return borrowedBorrowedPassword.equals(passwords[searchedIndex]);
+
+	}	//END getPasswordMatch getter
+
+
+	//BEGIN getFileName getter
+	public String getFileName()
+	{
+		//return masterFileName variable to calling method
+		return masterFileName;
+
+	}	//END getFileName getter
+
+
+	//BEGIN getMaximumRecords getter
+	public int getMaximumRecords()
+	{
+		//return MAXIMUM_RECORDS constant to calling method
+		return MAXIMUM_RECORDS;
+
+	}	//END getMaximumRecords getter
+
+
+	//BEGIN getRecordCount getter
+	public int getRecordCount()
+	{
+		//return recordCount variable to calling method
+		return recordCount;
+
+	}	//END getRecordCount getter 
+
+
+	//BEGIN getSearchedIndex getter
+	public int getSearchedIndex()
+	{
+		//return searchedIndex variable to calling method
+		return searchedIndex;
+
+	}	//END getSearchedIndex getter
+
+}	//END UserAccounts class
